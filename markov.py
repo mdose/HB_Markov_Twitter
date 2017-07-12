@@ -2,6 +2,8 @@
 
 from random import choice
 import sys
+import twitter
+import os
 
 
 def open_and_read_file(file_path1, file_path2):
@@ -116,6 +118,18 @@ def make_text(chains, n):
     # returns the list of words split by a space
     return " ".join(words)
 
+def tweet(random_text):
+    api = twitter.Api(
+        consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
+        consumer_secret=os.environ['TWITTER_CONSUMER_SECRET'],
+        access_token_key=os.environ['TWITTER_ACCESS_TOKEN_KEY'],
+        access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET']
+        )
+    print api.VerifyCredentials()
+
+    status = api.PostUpdate(random_text)
+    print status.text
+
 # takes in the first file to be read
 input_path_1 = sys.argv[1]
 # takes in the second file to be read
@@ -132,5 +146,6 @@ chains = make_chains(input_text, n)
 # Produce random text
 random_text = make_text(chains, n)
 
-print random_text
-print len(random_text)
+#print random_text
+
+tweet(random_text)
